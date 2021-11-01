@@ -12,4 +12,7 @@ public interface BookService {
 
     Book saveBook(Book book);
 
+    Book updateBook(long id,Book book);
+
+    boolean deleteBook(long id);
 }

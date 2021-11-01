@@ -35,6 +35,29 @@ public class BookController {
         return new ResponseEntity<>(_savedBook, HttpStatus.CREATED);
     }
 
+    @PutMapping("/books/{id}")
+    public  ResponseEntity<Book> updateBook(@PathVariable("id")long id,@RequestBody Book book){
 
+            Book _updatedBook = bookService.updateBook(id,book);
 
+            if(_updatedBook!=null){
+                return new ResponseEntity<>(_updatedBook,HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+    }
+
+    @DeleteMapping("/books/{id}")
+    public  ResponseEntity<HttpStatus> deleteBook(@PathVariable("id")long id){
+
+           boolean result = bookService.deleteBook(id);
+
+           if(result){
+               return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+           }
+           else {
+               return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+           }
+}
 }

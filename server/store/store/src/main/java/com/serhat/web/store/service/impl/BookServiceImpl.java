@@ -28,4 +28,36 @@ public class BookServiceImpl implements BookService {
     public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
+
+    @Override
+    public Book updateBook(long id,Book book) {
+
+        Book value=bookRepository.findById(id);
+
+        if(value!=null){
+            value.setAuthor(book.getAuthor());
+            value.setCoverPhotoURL(book.getCoverPhotoURL());
+            value.setLanguage(book.getLanguage());
+            value.setTitle(book.getTitle());
+            value.setPrice(book.getPrice());
+            value.setIsbnNumber(book.getIsbnNumber());
+
+            return bookRepository.save(value);
+        }
+        else {
+            return  null;
+        }
+    }
+
+    @Override
+    public boolean deleteBook(long id) {
+
+        Book value=bookRepository.findById(id);
+
+        if(value!=null){
+            bookRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
