@@ -15,9 +15,9 @@ import java.util.*;
 public class BookController {
 
     @Autowired
-    private BookService bookService;
 
-    @GetMapping("/books")
+    @GetMapping("/books")private BookService bookService;
+
     public List<Book> getAllBooks(){
         return bookService.getAllBooks();
     }
