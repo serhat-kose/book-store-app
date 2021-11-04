@@ -1,7 +1,7 @@
-import React from "react";
+import React,{Component} from "react";
 import { Container, Navbar,Col } from "react-bootstrap";
 
-class Footer extends React.Component {
+export default class Footer extends Component {
 
 	render(){
 
@@ -18,4 +18,3 @@ class Footer extends React.Component {
 	}
 }
 
-export default Footer;
