@@ -13,7 +13,7 @@ class NavigationBar extends React.Component {
             alt=" icons smart objects 3d book mockup psd address book icon psd preview"
           />
         </Link>
-
+      
         <Nav className="me-auto">
           <Link to={"/add"} className="nav-link">Add Book</Link>
           <Link to={"/list"} className="nav-link">Book List</Link>

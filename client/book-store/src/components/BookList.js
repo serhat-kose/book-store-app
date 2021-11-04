@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Card, Table,Image, ButtonGroup,Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList,faEdit,faTrash } from "@fortawesome/free-solid-svg-icons";
-import axios, {Axios} from 'axios'
+import axios from 'axios'
 
 
 
@@ -16,16 +16,21 @@ export default class BookList extends Component {
 	}
 
 	componentDidMount(){
+		this.getAllBooks();
+	}
+
+	getAllBooks(){
 		axios.get("http://localhost:8080/api/v1/books").then(response =>response.data).then( data => {
 			this.setState({books:data})
 		}
 			
 		);
 	}
+
   render() {
     return (
       <Card className="border border-dark bg-dark text-white">
-        <Card.Header><FontAwesomeIcon icon={faList} />Book List</Card.Header>
+        <Card.Header><FontAwesomeIcon icon={faList} />{' '} Book List</Card.Header>
         <Card.Body>
           <Table bordered hover striped variant="dark">
             <thead>
