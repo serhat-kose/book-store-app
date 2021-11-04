@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Card, Form, Button, Col, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusSquare, faSave } from "@fortawesome/free-solid-svg-icons";
 // import { Container, Navbar,Col } from "react-bootstrap";
 
 export default class Book extends Component {
@@ -34,7 +36,7 @@ export default class Book extends Component {
   render() {
     return (
       <Card className="border border-dark bg-dark text-white">
-        <Card.Header>Add Book</Card.Header>
+        <Card.Header><FontAwesomeIcon icon={ faPlusSquare} /> Add Book </Card.Header>
         <Form onSubmit={this.submitBook} id="bookFormId">
           <Card.Body>
             <Row>
@@ -117,7 +119,8 @@ export default class Book extends Component {
           </Card.Body>
           <Card.Footer style={{ textAlign: "right" }}>
             <Button size="sm" variant="success" type="submit">
-              Submit
+			<FontAwesomeIcon icon={faSave} /> 
+               Submit
             </Button>
           </Card.Footer>
         </Form>
