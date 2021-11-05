@@ -11,6 +11,7 @@ class NavigationBar extends React.Component {
             src="https://www.freeiconspng.com/uploads/-icons-smart-objects-3d-book-mockup-psd-address-book-icon-psd-preview-5.png"
             width="50"
             alt=" icons smart objects 3d book mockup psd address book icon psd preview"
+            name="Book Store"
           />
         </Link>
       
