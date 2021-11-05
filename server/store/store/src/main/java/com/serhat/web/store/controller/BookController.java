@@ -11,11 +11,12 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
     @Autowired
-    private BookService bookService;
+
+   private BookService bookService;
 
     @GetMapping("/books")
     public List<Book> getAllBooks(){

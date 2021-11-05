@@ -26,7 +26,7 @@ public class Book {
 
     @JsonCreator
     public Book(@JsonProperty("id") Long id, @JsonProperty("title") String title, @JsonProperty("author") String author,
-                @JsonProperty("coverPhotoURL") String coverPhotoURL, @JsonProperty("isbnNumber") Long isbnNumber,
+                @JsonProperty("coverPhotoUrl") String coverPhotoURL, @JsonProperty("isbnNumber") Long isbnNumber,
                 @JsonProperty("price") Double price, @JsonProperty("language") String language) {
         this.id = id;
         this.title = title;
