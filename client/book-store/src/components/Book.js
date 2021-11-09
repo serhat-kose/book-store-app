@@ -67,7 +67,7 @@ export default class Book extends Component {
     return (
 		<div>
 			<div style={{"display":this.state.show ? "block" : "none"}}>
-				<Toaster children={{show:this.state.show ,message:"Book Saved Successfully"}} ></Toaster>
+				<Toaster show={this.state.show} message={"Book Saved Successfully."} type={"success"} ></Toaster>
 			</div>
 			<Card className="border border-dark bg-dark text-white">
         <Card.Header><FontAwesomeIcon icon={ faPlusSquare} /> Add Book </Card.Header>
@@ -154,7 +154,7 @@ export default class Book extends Component {
           <Card.Footer style={{ textAlign: "right" }}>
             <Button size="sm" variant="success" type="submit">
 			<FontAwesomeIcon icon={faSave} /> {' '}
-               Submit
+               Save
             </Button> {' '}
 			<Button size="sm" variant="info" type="reset">
 			<FontAwesomeIcon icon={faUndo} /> {' '}
