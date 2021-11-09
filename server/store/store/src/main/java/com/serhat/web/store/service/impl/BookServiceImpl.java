@@ -30,9 +30,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBook(long id,Book book) {
+    public Book updateBook(Book book) {
 
-        Book value=bookRepository.findById(id);
+        Book value=bookRepository.findById(book.getId().longValue());
 
         if(value!=null){
             value.setAuthor(book.getAuthor());

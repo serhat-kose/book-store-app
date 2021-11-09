@@ -30,16 +30,16 @@ public class BookController {
         return new ResponseEntity<>(book,HttpStatus.OK);
     }
 
-    @PostMapping("/books")
+    @PostMapping("/books/add")
     public ResponseEntity<Book> createBook(@RequestBody Book book){
                  Book _savedBook =  bookService.saveBook(book);
         return new ResponseEntity<>(_savedBook, HttpStatus.CREATED);
     }
 
-    @PutMapping("/books/{id}")
-    public  ResponseEntity<Book> updateBook(@PathVariable("id")long id,@RequestBody Book book){
+    @PutMapping("/books/update")
+    public  ResponseEntity<Book> updateBook(@RequestBody Book book){
 
-            Book _updatedBook = bookService.updateBook(id,book);
+            Book _updatedBook = bookService.updateBook(book);
 
             if(_updatedBook!=null){
                 return new ResponseEntity<>(_updatedBook,HttpStatus.OK);
