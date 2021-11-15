@@ -90,7 +90,7 @@ export default class Book extends Component {
 		axios.put("http://localhost:8080/api/v1/books/update",book).then(response =>{
 				if(response.data!=null){
 					
-					this.setState({"show":true})
+					this.setState({"show":true,"method":"put"})
 					setTimeout(() => this.setState({"show":false}), 3000);
 					
 				}
@@ -123,7 +123,7 @@ export default class Book extends Component {
     return (
 		<div>
 			<div style={{"display":this.state.show ? "block" : "none"}}>
-				<Toaster show={this.state.show} message={"Book Saved Successfully."} type={"success"} ></Toaster>
+				<Toaster show={this.state.show} message={this.state.method==="put" ? "Book Updated Successfuly" : "Book Saved Successfuly"} type={"success"} ></Toaster>
 			</div>
 			<Card className="border border-dark bg-dark text-white">
         <Card.Header><FontAwesomeIcon icon={ this.state.id ? faEdit : faPlusSquare} /> {this.state.id ? "Update Book" : "Add Book"} </Card.Header>

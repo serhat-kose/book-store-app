@@ -5,6 +5,7 @@ import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
 import Book from "./components/Book";
 import BookList from "./components/BookList";
+import UserList from "./components/UserList";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <Route path="/add" exact component={Book} />
               <Route path="/edit/:id" exact component={Book} />
               <Route path="/list" exact component={BookList} />
+              <Route path="/users" exact component={UserList} />
             </Switch>
           </Col>
         </Row>

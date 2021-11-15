@@ -18,6 +18,7 @@ class NavigationBar extends React.Component {
         <Nav className="me-auto">
           <Link to={"/add"} className="nav-link">Add Book</Link>
           <Link to={"/list"} className="nav-link">Book List</Link>
+          <Link to={"/users"} className="nav-link">Users</Link>
         </Nav>
       </Navbar>
     );
