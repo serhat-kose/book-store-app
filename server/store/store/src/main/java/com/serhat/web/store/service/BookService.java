@@ -1,12 +1,13 @@
 package com.serhat.web.store.service;
 
 import com.serhat.web.store.entity.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
 public interface BookService {
 
-    List<Book> getAllBooks();
+    Page<Book> getAllBooks(Pageable pageable);
 
     Book getById(long id);
 
