@@ -8,10 +8,14 @@ import BookList from "./components/BookList";
 import UserList from "./components/UserList";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-function App() {
+export default function App() {
   const marginTop = {
     margin: "20px",
   };
+
+  const heading = "Welcome To Book Store"
+  const description = "Only The Strong Survive"
+
 
   return (
     <Router>
@@ -20,7 +24,7 @@ function App() {
         <Row>
           <Col lg={12} style={marginTop}>
             <Switch>
-              <Route path="/" exact component={Welcome} />
+              <Route path="/" exact component={()=> <Welcome heading={heading} description={description}/>} />
               <Route path="/add" exact component={Book} />
               <Route path="/edit/:id" exact component={Book} />
               <Route path="/list" exact component={BookList} />
@@ -34,4 +38,4 @@ function App() {
   );
 }
 
-export default App;
+
