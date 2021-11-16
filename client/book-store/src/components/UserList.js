@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Card, Table, Image, ButtonGroup, Button } from "react-bootstrap";
+import {
+  Card,
+  Table,
+  Image,
+  ButtonGroup,
+  Button,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faUsers,faStepBackward,faStepForward,faFastBackward,faFastForward } from "@fortawesome/free-solid-svg-icons";
 import Toaster from "./Toast";
 import { Link } from "react-router-dom";
 
@@ -11,6 +19,8 @@ export default class UserList extends Component {
     super(props);
     this.state = {
       users: [],
+      currentPage: 1,
+      usersPage: 5,
     };
   }
 
@@ -28,8 +38,59 @@ export default class UserList extends Component {
         this.setState({ users: data });
       });
   }
+  changePage = event => {
+    this.setState({
+      [event.target.name]:parseInt(event.target.value)
+    })
+  };
+
+  firstPage = () =>{
+    if(this.state.currentPage>1){
+      this.setState({
+        currentPage:1
+      });
+    }
+  };
+
+  lastPage = () =>{
+    if(this.state.currentPage< Math.ceil(this.state.users.length/this.state.usersPage)){
+      this.setState({
+        currentPage:Math.ceil(this.state.users.length/this.state.usersPage)
+      });
+    }
+  };
+
+  prevPage = () =>{
+    if(this.state.currentPage>1){
+      this.setState({
+        currentPage:this.state.currentPage-1
+      });
+    }
+  }
+
+  nextPage = () =>{
+    if(this.state.currentPage>1){
+      this.setState({
+        currentPage:this.state.currentPage+1
+      });
+    }
+  }
 
   render() {
+    const { users, usersPage, currentPage } = this.state;
+    const lastIndex = currentPage * usersPage;
+    const firstIndex = lastIndex - usersPage;
+    const currentUsers = users.slice(firstIndex, lastIndex);
+    const totalPages = users.length / usersPage;
+
+    const pageNumCss = {
+      width: "45px",
+      border:"1px solid #17A2B8",
+      color:"$17A2B8",
+      fontweight:"bold"
+    }
+
+
     return (
       <div>
         <Card className="border border-dark bg-dark text-white">
@@ -48,12 +109,12 @@ export default class UserList extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.users.length === 0 ? (
+                {users.length === 0 ? (
                   <tr align="center">
                     <td colSpan="6	">Books Available </td>
                   </tr>
                 ) : (
-                  this.state.users.map((user, index) => (
+                  currentUsers.map((user, index) => (
                     <tr key={index}>
                       <td>{user.first}</td>
 
@@ -67,6 +128,52 @@ export default class UserList extends Component {
               </tbody>
             </Table>
           </Card.Body>
+          <Card.Footer>
+            <div style={{ float: "left" }}>
+              Showing Page {currentPage} of {totalPages}
+            </div>
+            <div style={{ float: "right" }}>
+              <InputGroup >
+                <Button
+                  type="button"
+                  variant="outline-info"
+                  disabled={currentPage === 1 ? true : false}
+                  onClick={this.firstPage}
+                  
+                >
+                 <FontAwesomeIcon icon={faFastBackward} />   First
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline-info"
+                  disabled={currentPage === 1 ? true : false}
+                  onClick={this.prevPage}
+                >
+                 <FontAwesomeIcon icon={faStepBackward} /> Prev
+                </Button>
+                <FormControl style={pageNumCss} className="bg-dark"
+                 name="currentPage" 
+                 value={currentPage}
+                 onChange={this.changePage} />
+                <Button
+                  type="button"
+                  variant="outline-info"
+                  disabled={currentPage === totalPages ? true : false}
+                  onClick={this.nextPage}
+                >
+                 <FontAwesomeIcon icon={faStepForward} /> Next
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline-info"
+                  disabled={currentPage === totalPages ? true : false}
+                  onClick={this.lastPage}
+                >
+                 <FontAwesomeIcon icon={faFastForward} /> Last
+                </Button>
+              </InputGroup>
+            </div>
+          </Card.Footer>
         </Card>
       </div>
     );
