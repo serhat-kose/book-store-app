@@ -20,8 +20,8 @@ public class BookController {
    private BookService bookService;
 
     @GetMapping("/books")
-    public ResponseEntity<Page<Book>> getAllBooks(Pageable pageable){
-        return new ResponseEntity<>(bookService.getAllBooks(pageable),HttpStatus.OK) ;
+    public ResponseEntity<Page<Book>> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir){
+        return new ResponseEntity<>(bookService.getAllBooks(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK) ;
     }
 
     @GetMapping("/books/{id}")

@@ -16,8 +16,8 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Override
-    public Page<Book> getAllBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+    public Page<Book> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir) {
+        return bookRepository.findAll(PageRequest.of(pageNumber,pageSize,sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()));
     }
 
     @Override

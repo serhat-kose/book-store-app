@@ -9,9 +9,7 @@ import UserList from "./components/UserList";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export default function App() {
-  const marginTop = {
-    margin: "20px",
-  };
+   
 
   const heading = "Welcome To Book Store"
   const description = "Only The Strong Survive"
@@ -22,7 +20,7 @@ export default function App() {
       <NavigationBar></NavigationBar>
       <Container> 
         <Row>
-          <Col lg={12} style={marginTop}>
+          <Col lg={12} className={"margin-top"}>
             <Switch>
               <Route path="/" exact component={()=> <Welcome heading={heading} description={description}/>} />
               <Route path="/add" exact component={Book} />

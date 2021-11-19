@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare, faSave, faUndo,faList,faEdit } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios'
 import Toaster from "./Toast";
+import "./Style.css"
 // import { Container, Navbar,Col } from "react-bootstrap";
 
 export default class Book extends Component {
