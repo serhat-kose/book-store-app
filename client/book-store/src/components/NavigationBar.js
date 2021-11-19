@@ -14,6 +14,11 @@ class NavigationBar extends React.Component {
             name="Book Store"
           />
         </Link>
+
+        <Nav className="me-auto">
+          <Link to={""} className="nav-link">Book Store</Link>
+        
+        </Nav>
       
         <Nav className="me-auto">
           <Link to={"/add"} className="nav-link">Add Book</Link>

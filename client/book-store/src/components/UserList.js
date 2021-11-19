@@ -83,14 +83,6 @@ export default class UserList extends Component {
     const currentUsers = users.slice(firstIndex, lastIndex);
     const totalPages = users.length / usersPage;
 
-    const pageNumCss = {
-      width: "45px",
-      border:"1px solid #17A2B8",
-      color:"$17A2B8",
-      fontweight:"bold"
-    }
-
-
     return (
       <div>
         <Card className="border border-dark bg-dark text-white">
@@ -151,7 +143,7 @@ export default class UserList extends Component {
                 >
                  <FontAwesomeIcon icon={faStepBackward} /> Prev
                 </Button>
-                <FormControl style={pageNumCss} className="bg-dark"
+                <FormControl  className="page-num bg-dark"
                  name="currentPage" 
                  value={currentPage}
                  onChange={this.changePage} />

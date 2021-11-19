@@ -5,6 +5,7 @@ import { faList, faEdit, faTrash,faStepBackward,faStepForward,faFastBackward,faF
 import axios from "axios";
 import Toaster from "./Toast";
 import { Link } from "react-router-dom";
+import "./Style.css"
 
 export default class BookList extends Component {
   constructor(props) {
@@ -13,8 +14,16 @@ export default class BookList extends Component {
       books: [],
       currentPage:1,
       booksPerPage:5,
+      sortToggle : true
       
     };
+  }
+
+  sortData = () =>{
+    this.setState(state =>({
+      sortToggle : !state.sortToggle
+    }));
+    this.getAllBooks(this.state.currentPage);
   }
 
   componentDidMount() {
@@ -24,8 +33,9 @@ export default class BookList extends Component {
   getAllBooks(currentPage) {
 
     currentPage -=1;
+    let sortDir = this.state.sortToggle ? "asc" : "desc"
     axios
-      .get("http://localhost:8080/api/v1/books?page="+ currentPage+ "&size="+this.state.booksPerPage)
+      .get("http://localhost:8080/api/v1/books?pageNumber="+ currentPage+ "&pageSize="+this.state.booksPerPage+"&sortBy=price&sortDir="+sortDir)
       .then((response) => response.data)
       .then((data) => {
         this.setState({ 
@@ -96,12 +106,7 @@ export default class BookList extends Component {
 
     const { books, currentPage, totalPages } = this.state;
 
-    const pageNumCss = {
-      width: "45px",
-      border:"1px solid #17A2B8",
-      color:"$17A2B8",
-      fontweight:"bold"
-    }
+     
     return (
       <div>
         <div style={{ display: this.state.show ? "block" : "none" }}>
@@ -120,7 +125,7 @@ export default class BookList extends Component {
                   <th>Title</th>
                   <th>Author</th>
                   <th>ISBN Number</th>
-                  <th>Price</th>
+                  <th onClick={this.sortData}>Price <div className={this.state.sortToggle ? "arrow arrow-down" : "arrow arrow-up"}></div></th>
                   <th>Language</th>
                   <th>Actions</th>
                 </tr>
@@ -192,7 +197,7 @@ export default class BookList extends Component {
                 >
                  <FontAwesomeIcon icon={faStepBackward} /> Prev
                 </Button>
-                <FormControl style={pageNumCss} className="bg-dark"
+                <FormControl  className="page-num bg-dark"
                  name="currentPage" 
                  value={currentPage}
                  onChange={this.changePage} />
