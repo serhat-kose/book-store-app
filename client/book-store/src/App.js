@@ -7,7 +7,8 @@ import Book from "./components/Book";
 import BookList from "./components/BookList";
 import UserList from "./components/UserList";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+import {Provider} from 'react-redux'
+import  store  from "./services/store";
 export default function App() {
    
 
@@ -26,7 +27,8 @@ export default function App() {
               <Route path="/add" exact component={Book} />
               <Route path="/edit/:id" exact component={Book} />
               <Route path="/list" exact component={BookList} />
-              <Route path="/users" exact component={UserList} />
+              <Route path="/users" exact component={()=><Provider store={store}>
+                <UserList/></Provider>} />
             </Switch>
           </Col>
         </Row>
