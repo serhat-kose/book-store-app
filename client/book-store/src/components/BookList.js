@@ -1,49 +1,74 @@
 import React, { Component } from "react";
-import { Card, Table, Image, ButtonGroup, Button,FormControl,InputGroup } from "react-bootstrap";
+import {
+  Card,
+  Table,
+  Image,
+  ButtonGroup,
+  Button,
+  FormControl,
+  InputGroup,
+  Form,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faEdit, faTrash,faStepBackward,faStepForward,faFastBackward,faFastForward } from "@fortawesome/free-solid-svg-icons";
+import {
+  faList,
+  faEdit,
+  faTrash,
+  faStepBackward,
+  faStepForward,
+  faFastBackward,
+  faFastForward,
+  faSearch,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Toaster from "./Toast";
 import { Link } from "react-router-dom";
-import "./Style.css"
+import "./Style.css";
 
 export default class BookList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
-      currentPage:1,
-      booksPerPage:5,
-      sortToggle : true
-      
+      currentPage: 1,
+      booksPerPage: 5,
+      search: "",
+      sortToggle: true,
     };
   }
 
-  sortData = () =>{
-    this.setState(state =>({
-      sortToggle : !state.sortToggle
+  sortData = () => {
+    this.setState((state) => ({
+      sortToggle: !state.sortToggle,
     }));
     this.getAllBooks(this.state.currentPage);
-  }
+  };
 
   componentDidMount() {
     this.getAllBooks(this.state.currentPage);
   }
 
   getAllBooks(currentPage) {
-
-    currentPage -=1;
-    let sortDir = this.state.sortToggle ? "asc" : "desc"
+    currentPage -= 1;
+    let sortDir = this.state.sortToggle ? "asc" : "desc";
     axios
-      .get("http://localhost:8080/api/v1/books?pageNumber="+ currentPage+ "&pageSize="+this.state.booksPerPage+"&sortBy=price&sortDir="+sortDir)
+      .get(
+        "http://localhost:8080/api/v1/books?pageNumber=" +
+          currentPage +
+          "&pageSize=" +
+          this.state.booksPerPage +
+          "&sortBy=price&sortDir=" +
+          sortDir
+      )
       .then((response) => response.data)
       .then((data) => {
-        this.setState({ 
+        this.setState({
           books: data.content,
-          totalPages:data.totalPages,
-          totalElements:data.totalElements,
-          currentPage:data.number+1
-         });
+          totalPages: data.totalPages,
+          totalElements: data.totalElements,
+          currentPage: data.number + 1,
+        });
       });
   }
 
@@ -54,7 +79,6 @@ export default class BookList extends Component {
         if (response.data != null) {
           this.setState({ show: true });
           setTimeout(() => this.setState({ show: false }), 3000);
-          
 
           this.setState({
             books: this.state.books.filter((book) => book.id != bookId),
@@ -63,60 +87,144 @@ export default class BookList extends Component {
       });
   };
 
-  changePage = event => {
+  changePage = (event) => {
+    let targetPage = parseInt(event.target.value);
 
-    let targetPage=parseInt(event.target.value);
-    this.getAllBooks(targetPage);
+    if(this.state.search){
+      this.searchData(targetPage);
+    }
+    else {
+      this.getAllBooks(targetPage);
+    }
+   
     this.setState({
-      [event.target.name]:targetPage
+      [event.target.name]: targetPage,
+    });
+  };
+
+  firstPage = () => {
+    let firstPage = 1;
+    if (this.state.currentPage > firstPage) {
+      if(this.state.search){
+        this.searchData(firstPage);
+      }
+      else {
+        this.getAllBooks(firstPage);
+      }
+    }
+  };
+
+  lastPage = () => {
+    let condition = Math.ceil(
+      this.state.totalElements / this.state.booksPerPage
+    );
+
+    if (this.state.currentPage < condition) {
+      if(this.state.search){
+        this.searchData(condition);
+      }
+      else {
+        this.getAllBooks(condition);
+      }
+    }
+  };
+
+  prevPage = () => {
+    let prevPage = 1;
+    if (this.state.currentPage > prevPage) {
+     
+      if(this.state.search){
+        this.searchData(this.state.currentPage - prevPage);
+      }
+      else {
+        this.getAllBooks(this.state.currentPage - prevPage);
+      }
+    }
+  };
+
+  nextPage = () => {
+    if (
+      this.state.currentPage <
+      Math.ceil(this.state.totalElements / this.state.booksPerPage)
+    ) {
+     
+      if(this.state.search){
+        this.searchData(this.state.currentPage + 1);
+      }
+      else {
+        this.getAllBooks(this.state.currentPage + 1);
+      }
+    }
+  };
+
+  searchChange = event => {
+    this.setState({
+      [event.target.name] : event.target.value
     })
   };
 
-  firstPage = () =>{
-
-    let firstPage=1;
-    if(this.state.currentPage>firstPage){
-      this.getAllBooks(firstPage);
-    }
+  cancelSearch = () => {
+    this.setState({
+      "search": ''
+    })
+    this.getAllBooks(this.state.currentPage);
   };
 
-  lastPage = () =>{
-
-    let condition = Math.ceil(this.state.totalElements/this.state.booksPerPage);
-
-    if(this.state.currentPage< condition ){
-      this.getAllBooks(condition);
-    }
+  searchData = (currentPage) => {
+    currentPage -= 1;
+    
+    axios
+      .get(
+        "http://localhost:8080/api/v1/books/search/" + this.state.search +"?page=" + currentPage+"&size=" +this.state.booksPerPage
+        
+          
+      )
+      .then((response) => response.data)
+      .then((data) => {
+        this.setState({
+          books: data.content,
+          totalPages: data.totalPages,
+          totalElements: data.totalElements,
+          currentPage: data.number + 1,
+        });
+      });
   };
-
-  prevPage = () =>{
-    let prevPage =1;
-    if(this.state.currentPage>prevPage){
-      this.getAllBooks(this.state.currentPage-prevPage);
-    }
-  }
-
-  nextPage = () =>{
-    if(this.state.currentPage<Math.ceil(this.state.totalElements/this.state.booksPerPage)){
-      this.getAllBooks(this.state.currentPage+1);
-    }
-  }
 
   render() {
+    const { books, currentPage, totalPages, search } = this.state;
 
-    const { books, currentPage, totalPages } = this.state;
-
-     
     return (
       <div>
         <div style={{ display: this.state.show ? "block" : "none" }}>
           <Toaster
-            show={this.state.show}message={"Book Deleted Successfully"} type={"danger"} 
+            show={this.state.show}
+            message={"Book Deleted Successfully"}
+            type={"danger"}
           ></Toaster>
         </div>
         <Card className="border border-dark bg-dark text-white">
           <Card.Header>
-            <FontAwesomeIcon icon={faList} /> Book List
+            <div style={{ float: "left" }}>
+              <FontAwesomeIcon icon={faList} /> Book List
+            </div>
+            <div style={{ float: "right" }}>
+              <InputGroup size="sm">
+                <Form.Control
+                  placeholder="Search"
+                  name="search"
+                  value={search}
+                  className={"info-border bg-dark text-wihte"}
+                  onChange={this.searchChange}
+                ></Form.Control>
+
+                <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
+                  <FontAwesomeIcon icon={faSearch}  />
+                </Button>
+                <Button size="sm" variant="outline-info" type="button" onClick={this.cancelSearch}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </Button>
+              </InputGroup>
+            </div>
           </Card.Header>
           <Card.Body>
             <Table bordered hover striped variant="dark">
@@ -125,8 +233,18 @@ export default class BookList extends Component {
                   <th>Title</th>
                   <th>Author</th>
                   <th>ISBN Number</th>
-                  <th onClick={this.sortData}>Price <div className={this.state.sortToggle ? "arrow arrow-down" : "arrow arrow-up"}></div></th>
+                  <th onClick={this.sortData}>
+                    Price{" "}
+                    <div
+                      className={
+                        this.state.sortToggle
+                          ? "arrow arrow-down"
+                          : "arrow arrow-up"
+                      }
+                    ></div>
+                  </th>
                   <th>Language</th>
+                  <th>Genre</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -151,9 +269,15 @@ export default class BookList extends Component {
                       <td>{book.isbnNumber}</td>
                       <td>{book.price}</td>
                       <td>{book.language}</td>
+                      <td>{book.genre}</td>
                       <td>
                         <ButtonGroup>
-                        <Link to={"edit/" +book.id} className="btn btn-sm btn-outline-primary"><FontAwesomeIcon icon={faEdit} /></Link> {' '}
+                          <Link
+                            to={"edit/" + book.id}
+                            className="btn btn-sm btn-outline-primary"
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </Link>{" "}
                           {/* <Button size="sm" variant="outline-primary">
                             <FontAwesomeIcon icon={faEdit} />
                             Edit
@@ -164,7 +288,6 @@ export default class BookList extends Component {
                             onClick={this.deleteBook.bind(this, book.id)}
                           >
                             <FontAwesomeIcon icon={faTrash} />
-                            
                           </Button>
                         </ButtonGroup>
                       </td>
@@ -179,15 +302,14 @@ export default class BookList extends Component {
               Showing Page {currentPage} of {totalPages}
             </div>
             <div style={{ float: "right" }}>
-              <InputGroup >
+              <InputGroup>
                 <Button
                   type="button"
                   variant="outline-info"
                   disabled={currentPage === 1 ? true : false}
                   onClick={this.firstPage}
-                  
                 >
-                 <FontAwesomeIcon icon={faFastBackward} />   First
+                  <FontAwesomeIcon icon={faFastBackward} /> First
                 </Button>
                 <Button
                   type="button"
@@ -195,19 +317,21 @@ export default class BookList extends Component {
                   disabled={currentPage === 1 ? true : false}
                   onClick={this.prevPage}
                 >
-                 <FontAwesomeIcon icon={faStepBackward} /> Prev
+                  <FontAwesomeIcon icon={faStepBackward} /> Prev
                 </Button>
-                <FormControl  className="page-num bg-dark"
-                 name="currentPage" 
-                 value={currentPage}
-                 onChange={this.changePage} />
+                <FormControl
+                  className="page-num bg-dark"
+                  name="currentPage"
+                  value={currentPage}
+                  onChange={this.changePage}
+                />
                 <Button
                   type="button"
                   variant="outline-info"
                   disabled={currentPage === totalPages ? true : false}
                   onClick={this.nextPage}
                 >
-                 <FontAwesomeIcon icon={faStepForward} /> Next
+                  <FontAwesomeIcon icon={faStepForward} /> Next
                 </Button>
                 <Button
                   type="button"
@@ -215,7 +339,7 @@ export default class BookList extends Component {
                   disabled={currentPage === totalPages ? true : false}
                   onClick={this.lastPage}
                 >
-                 <FontAwesomeIcon icon={faFastForward} /> Last
+                  <FontAwesomeIcon icon={faFastForward} /> Last
                 </Button>
               </InputGroup>
             </div>

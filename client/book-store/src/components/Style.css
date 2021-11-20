@@ -1,4 +1,8 @@
 
+.info-border {
+	border: 1px solid #17A2B8;
+}
+
  .page-num {
 	width: 45px !important;
 	border: 1px solid #17A2B8;
