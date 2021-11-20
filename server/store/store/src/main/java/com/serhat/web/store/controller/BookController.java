@@ -3,6 +3,7 @@ package com.serhat.web.store.controller;
 import com.serhat.web.store.entity.*;
 import com.serhat.web.store.repository.*;
 import com.serhat.web.store.service.*;
+import com.sun.source.tree.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
@@ -22,6 +23,26 @@ public class BookController {
     @GetMapping("/books")
     public ResponseEntity<Page<Book>> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir){
         return new ResponseEntity<>(bookService.getAllBooks(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK) ;
+    }
+
+    @GetMapping("/books/search/{searchText}")
+    public ResponseEntity<Page<Book>> getAllBooks(Pageable pageable,@PathVariable("searchText") String searchText){
+        return new ResponseEntity<>(bookService.getAllBooks(pageable,searchText),HttpStatus.OK) ;
+    }
+
+
+
+
+    @GetMapping("/books/genres")
+    public ResponseEntity<Set<String>> getAllGenres(){
+        return new ResponseEntity<>(new TreeSet<>(Arrays.asList("Technology","Science","History","Fantasy","Biography","Horror","Romance")),HttpStatus.OK) ;
+
+    }
+
+    @GetMapping("/books/languages")
+    public ResponseEntity<Set<String>> getAllLanguages(){
+        return new ResponseEntity<>(new TreeSet<>(Arrays.asList("English","Portuguese","French","Turkish","Russian","Hindi","Spanish")),HttpStatus.OK) ;
+
     }
 
     @GetMapping("/books/{id}")

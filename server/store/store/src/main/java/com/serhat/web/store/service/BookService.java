@@ -7,6 +7,8 @@ import java.util.*;
 
 public interface BookService {
 
+    Page<Book> getAllBooks(Pageable pageable,String searchText);
+
     Page<Book> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir);
 
     Book getById(long id);
