@@ -10,15 +10,13 @@ class NavigationBar extends React.Component {
           <img
             src="https://www.freeiconspng.com/uploads/-icons-smart-objects-3d-book-mockup-psd-address-book-icon-psd-preview-5.png"
             width="50"
+            height="50"
             alt=" icons smart objects 3d book mockup psd address book icon psd preview"
             name="Book Store"
-          />
+           
+          />Book Store
         </Link>
 
-        <Nav className="me-auto">
-          <Link to={""} className="nav-link">Book Store</Link>
-        
-        </Nav>
       
         <Nav className="me-auto">
           <Link to={"/add"} className="nav-link">Add Book</Link>
