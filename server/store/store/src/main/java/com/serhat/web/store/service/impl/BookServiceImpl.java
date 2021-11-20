@@ -16,6 +16,11 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Override
+    public Page<Book> getAllBooks(Pageable pageable, String searchText) {
+        return bookRepository.findAllBooks(pageable,searchText);
+    }
+
+    @Override
     public Page<Book> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir) {
         return bookRepository.findAll(PageRequest.of(pageNumber,pageSize,sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()));
     }
@@ -42,6 +47,7 @@ public class BookServiceImpl implements BookService {
             value.setTitle(book.getTitle());
             value.setPrice(book.getPrice());
             value.setIsbnNumber(book.getIsbnNumber());
+            value.setGenre(book.getGenre());
 
             return bookRepository.save(value);
         }

@@ -23,11 +23,12 @@ public class Book {
     private Long isbnNumber;
     private Double price;
     private String language;
+    private String genre;
 
     @JsonCreator
     public Book(@JsonProperty("id") Long id, @JsonProperty("title") String title, @JsonProperty("author") String author,
                 @JsonProperty("coverPhotoUrl") String coverPhotoURL, @JsonProperty("isbnNumber") Long isbnNumber,
-                @JsonProperty("price") Double price, @JsonProperty("language") String language) {
+                @JsonProperty("price") Double price, @JsonProperty("language") String language,@JsonProperty("genre") String genre) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -35,5 +36,6 @@ public class Book {
         this.isbnNumber = isbnNumber;
         this.price = price;
         this.language = language;
+        this.genre=genre;
     }
 }
