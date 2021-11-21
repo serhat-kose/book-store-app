@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchUsers } from "../services/user/userActions";
+import { fetchUsers } from "../../services/index";
 import {
   Card,
   Table,
@@ -99,7 +99,7 @@ class UserList extends Component {
       <div>
         <div>
           {userData.error ? (
-            <Alert variant="danger">{userData.error}</Alert>
+            <Alert variant="danger"> {userData.error}</Alert>
           ) : (
             <Card className="border border-dark bg-dark text-white">
               <Card.Header>

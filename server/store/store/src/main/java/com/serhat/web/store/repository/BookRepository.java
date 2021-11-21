@@ -10,6 +10,6 @@ public interface BookRepository extends PagingAndSortingRepository<Book,Long> {
 
       Book findById(long bookId);
 
-      @Query("From Book b  where b.title=:searchText OR b.author=:searchText OR b.genre=:searchText OR b.language=:searchText OR b.price=:searchText")
+      @Query("From Book b  where b.title LIKE %:searchText% OR b.author LIKE %:searchText% OR b.genre LIKE %:searchText%  OR b.language LIKE %:searchText%  order by b.price DESC ")
       Page<Book> findAllBooks(Pageable pageable, @Param("searchText") String searchText);
 }

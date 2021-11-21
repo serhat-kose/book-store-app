@@ -22,9 +22,9 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import Toaster from "./Toast";
+import Toaster from "../Toast";
 import { Link } from "react-router-dom";
-import "./Style.css";
+import "../../assets/css/Style.css";
 
 export default class BookList extends Component {
   constructor(props) {
@@ -34,14 +34,14 @@ export default class BookList extends Component {
       currentPage: 1,
       booksPerPage: 5,
       search: "",
-      sortToggle: true,
+      sortDir: "asc",
     };
   }
 
   sortData = () => {
-    this.setState((state) => ({
-      sortToggle: !state.sortToggle,
-    }));
+    this.state.sortDir === "asc"
+      ? this.setState({ sortDir: "desc" })
+      : this.setState({ sortDir: "asc" });
     this.getAllBooks(this.state.currentPage);
   };
 
@@ -51,7 +51,6 @@ export default class BookList extends Component {
 
   getAllBooks(currentPage) {
     currentPage -= 1;
-    let sortDir = this.state.sortToggle ? "asc" : "desc";
     axios
       .get(
         "http://localhost:8080/api/v1/books?pageNumber=" +
@@ -59,7 +58,7 @@ export default class BookList extends Component {
           "&pageSize=" +
           this.state.booksPerPage +
           "&sortBy=price&sortDir=" +
-          sortDir
+          this.state.sortDir
       )
       .then((response) => response.data)
       .then((data) => {
@@ -90,13 +89,12 @@ export default class BookList extends Component {
   changePage = (event) => {
     let targetPage = parseInt(event.target.value);
 
-    if(this.state.search){
+    if (this.state.search) {
       this.searchData(targetPage);
-    }
-    else {
+    } else {
       this.getAllBooks(targetPage);
     }
-   
+
     this.setState({
       [event.target.name]: targetPage,
     });
@@ -105,10 +103,9 @@ export default class BookList extends Component {
   firstPage = () => {
     let firstPage = 1;
     if (this.state.currentPage > firstPage) {
-      if(this.state.search){
+      if (this.state.search) {
         this.searchData(firstPage);
-      }
-      else {
+      } else {
         this.getAllBooks(firstPage);
       }
     }
@@ -120,10 +117,9 @@ export default class BookList extends Component {
     );
 
     if (this.state.currentPage < condition) {
-      if(this.state.search){
+      if (this.state.search) {
         this.searchData(condition);
-      }
-      else {
+      } else {
         this.getAllBooks(condition);
       }
     }
@@ -132,11 +128,9 @@ export default class BookList extends Component {
   prevPage = () => {
     let prevPage = 1;
     if (this.state.currentPage > prevPage) {
-     
-      if(this.state.search){
+      if (this.state.search) {
         this.searchData(this.state.currentPage - prevPage);
-      }
-      else {
+      } else {
         this.getAllBooks(this.state.currentPage - prevPage);
       }
     }
@@ -147,37 +141,38 @@ export default class BookList extends Component {
       this.state.currentPage <
       Math.ceil(this.state.totalElements / this.state.booksPerPage)
     ) {
-     
-      if(this.state.search){
+      if (this.state.search) {
         this.searchData(this.state.currentPage + 1);
-      }
-      else {
+      } else {
         this.getAllBooks(this.state.currentPage + 1);
       }
     }
   };
 
-  searchChange = event => {
+  searchChange = (event) => {
     this.setState({
-      [event.target.name] : event.target.value
-    })
+      [event.target.name]: event.target.value,
+    });
   };
 
   cancelSearch = () => {
     this.setState({
-      "search": ''
-    })
+      search: "",
+    });
     this.getAllBooks(this.state.currentPage);
   };
 
   searchData = (currentPage) => {
     currentPage -= 1;
-    
+
     axios
       .get(
-        "http://localhost:8080/api/v1/books/search/" + this.state.search +"?page=" + currentPage+"&size=" +this.state.booksPerPage
-        
-          
+        "http://localhost:8080/api/v1/books/search/" +
+          this.state.search +
+          "?page=" +
+          currentPage +
+          "&size=" +
+          this.state.booksPerPage
       )
       .then((response) => response.data)
       .then((data) => {
@@ -217,10 +212,20 @@ export default class BookList extends Component {
                   onChange={this.searchChange}
                 ></Form.Control>
 
-                <Button size="sm" variant="outline-info" type="button" onClick={this.searchData}>
-                  <FontAwesomeIcon icon={faSearch}  />
+                <Button
+                  size="sm"
+                  variant="outline-info"
+                  type="button"
+                  onClick={this.searchData}
+                >
+                  <FontAwesomeIcon icon={faSearch} />
                 </Button>
-                <Button size="sm" variant="outline-info" type="button" onClick={this.cancelSearch}>
+                <Button
+                  size="sm"
+                  variant="outline-info"
+                  type="button"
+                  onClick={this.cancelSearch}
+                >
                   <FontAwesomeIcon icon={faTimes} />
                 </Button>
               </InputGroup>
@@ -237,7 +242,7 @@ export default class BookList extends Component {
                     Price{" "}
                     <div
                       className={
-                        this.state.sortToggle
+                        this.state.sortDir === "asc"
                           ? "arrow arrow-down"
                           : "arrow arrow-up"
                       }
