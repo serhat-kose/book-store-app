@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Book from "./components/Book/Book";
 import BookList from "./components/Book/BookList";
 import UserList from "./components/User/UserList";
+import Login from "./components/User/Login"
+import Register from "./components/User/Register"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export default function App() {
@@ -27,6 +29,8 @@ export default function App() {
               <Route path="/edit/:id" exact component={Book} />
               <Route path="/list" exact component={BookList} />
               <Route path="/users" exact component={UserList} />
+              <Route path="/login" exact component={Login} />
+              <Route path="/register" exact component={Register} />
             </Switch>
           </Col>
         </Row>
