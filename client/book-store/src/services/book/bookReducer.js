@@ -3,6 +3,7 @@ import {
 	BOOK_SUCCESS,
 	BOOK_FAILURE,
 	UPDATE_BOOK_REQUEST,
+	DELETE_BOOK_REQUEST,
 	FETCH_BOOK_REQUEST
   } from "./bookTypes";
 
@@ -13,18 +14,11 @@ import {
 
   const reducer = (state=initialState,action) => {
 	switch (action.type) {
-		case SAVE_BOOK_REQUEST:
+		case SAVE_BOOK_REQUEST || FETCH_BOOK_REQUEST || UPDATE_BOOK_REQUEST || DELETE_BOOK_REQUEST:
 		  return {
 			...state,
 		  };
-		  case FETCH_BOOK_REQUEST:
-			return {
-			  ...state,
-			};
-			case UPDATE_BOOK_REQUEST:
-				return {
-				  ...state,
-				};
+			
 		case BOOK_SUCCESS:
 		  return {
 			book: action.payload,
