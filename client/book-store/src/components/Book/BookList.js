@@ -24,9 +24,11 @@ import {
 import axios from "axios";
 import Toaster from "../Toast";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { deleteBook } from "../../services/index";
 import "../../assets/css/Style.css";
 
-export default class BookList extends Component {
+class BookList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,10 +41,12 @@ export default class BookList extends Component {
   }
 
   sortData = () => {
-    this.state.sortDir === "asc"
+    setTimeout(() => {
+      this.state.sortDir === "asc"
       ? this.setState({ sortDir: "desc" })
       : this.setState({ sortDir: "asc" });
     this.getAllBooks(this.state.currentPage);
+    }, 300);
   };
 
   componentDidMount() {
@@ -72,18 +76,27 @@ export default class BookList extends Component {
   }
 
   deleteBook = (bookId) => {
-    axios
-      .delete("http://localhost:8080/api/v1/books/" + bookId)
-      .then((response) => {
-        if (response.data != null) {
-          this.setState({ show: true });
-          setTimeout(() => this.setState({ show: false }), 3000);
+    this.props.deleteBook(bookId);
+    setTimeout(() => {
+      if (this.props.bookObject != null) {
+        this.setState({ show: true });
+        setTimeout(() => this.setState({ show: false }), 3000);
+        this.getAllBooks(this.state.currentPage);
+      }
+    }, 1000);
 
-          this.setState({
-            books: this.state.books.filter((book) => book.id != bookId),
-          });
-        }
-      });
+    // axios
+    //   .delete("http://localhost:8080/api/v1/books/" + bookId)
+    //   .then((response) => {
+    //     if (response.data != null) {
+    //       this.setState({ show: true });
+    //       setTimeout(() => this.setState({ show: false }), 3000);
+
+    //       this.setState({
+    //         books: this.state.books.filter((book) => book.id != bookId),
+    //       });
+    //     }
+    //   });
   };
 
   changePage = (event) => {
@@ -243,8 +256,8 @@ export default class BookList extends Component {
                     <div
                       className={
                         this.state.sortDir === "asc"
-                          ? "arrow arrow-down"
-                          : "arrow arrow-up"
+                          ? "arrow arrow-up"
+                          : "arrow arrow-down"
                       }
                     ></div>
                   </th>
@@ -354,3 +367,17 @@ export default class BookList extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    bookObject: state.book,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteBook: (bookId) => dispatch(deleteBook(bookId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);

@@ -3,6 +3,7 @@ import {
 	BOOK_SUCCESS,
 	BOOK_FAILURE,
 	UPDATE_BOOK_REQUEST,
+	DELETE_BOOK_REQUEST,
 	FETCH_BOOK_REQUEST
   } from "./bookTypes";
 
@@ -63,7 +64,28 @@ export const fetchBook = bookId => {
 			dispatch(BookFailure(error))
 		})
 	}
-}
+};
+
+const deleteBookRequest = () =>{
+	return {
+		type: DELETE_BOOK_REQUEST
+	}
+};
+
+export const deleteBook = bookId => {
+	return dispatch => {
+		dispatch(deleteBookRequest());
+		axios.delete("http://localhost:8080/api/v1/books/"+bookId)
+		.then(response =>{
+			dispatch(BookSuccess(response.data));
+		})
+		.catch(error =>{
+			dispatch(BookFailure(error))
+		})
+	}
+};
+
+
 
   const BookSuccess = book =>{
 	return {
