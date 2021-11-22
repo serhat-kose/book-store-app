@@ -1,11 +1,6 @@
-import {
-	SAVE_BOOK_REQUEST,
-	BOOK_SUCCESS,
-	BOOK_FAILURE,
-	UPDATE_BOOK_REQUEST,
-	DELETE_BOOK_REQUEST,
-	FETCH_BOOK_REQUEST
-  } from "./bookTypes";
+import 
+* as BT
+   from "./bookTypes";
 
   const initialState = {
 	  book:'',
@@ -14,21 +9,43 @@ import {
 
   const reducer = (state=initialState,action) => {
 	switch (action.type) {
-		case SAVE_BOOK_REQUEST || FETCH_BOOK_REQUEST || UPDATE_BOOK_REQUEST || DELETE_BOOK_REQUEST:
+		case BT.SAVE_BOOK_REQUEST || BT.FETCH_BOOK_REQUEST 
+		|| BT.UPDATE_BOOK_REQUEST || BT.DELETE_BOOK_REQUEST
+		|| BT.FETCH_LANGUAGES_REQUEST || BT.FETCH_GENRES_REQUEST:
 		  return {
 			...state,
 		  };
 			
-		case BOOK_SUCCESS:
+		case BT.BOOK_SUCCESS:
 		  return {
 			book: action.payload,
 			error: "",
 		  };
-		  case BOOK_FAILURE:
-			  return{
-				  book:'',
-				  error:action.payload
-			  };
+		  case BT.BOOK_FAILURE:
+			return{
+				book:'',
+				error:action.payload
+			};
+		  case BT.LANGUAGE_SUCCESS:
+			return {
+			  languages: action.payload,
+			  error: "",
+			};
+			case BT.LANGUAGE_FAILURE:
+				return{
+					languages:'',
+					error:action.payload
+				};
+				case BT.GENRE_SUCCESS:
+					return {
+					  genres: action.payload,
+					  error: "",
+					};
+					case BT.GENRE_FAILURE:
+						return{
+							genres:'',
+							error:action.payload
+						};
 			  default:
 				  return state;
 	  }

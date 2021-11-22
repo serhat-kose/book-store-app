@@ -1,11 +1,4 @@
-import {
-	SAVE_BOOK_REQUEST,
-	BOOK_SUCCESS,
-	BOOK_FAILURE,
-	UPDATE_BOOK_REQUEST,
-	DELETE_BOOK_REQUEST,
-	FETCH_BOOK_REQUEST
-  } from "./bookTypes";
+import * as BT from "./bookTypes";
 
   import axios from "axios";
 
@@ -24,13 +17,13 @@ import {
 
   const saveBookRequest = () =>{
 	  return {
-		  type: SAVE_BOOK_REQUEST
+		  type: BT.SAVE_BOOK_REQUEST
 	  }
   };
 
   const updateBookRequest = () =>{
 	return {
-		type: UPDATE_BOOK_REQUEST
+		type: BT.UPDATE_BOOK_REQUEST
 	}
 };
 
@@ -49,7 +42,7 @@ export const updateBook = book => {
 
 const fetchBookRequest = () =>{
 	return {
-		type: FETCH_BOOK_REQUEST
+		type: BT.FETCH_BOOK_REQUEST
 	}
 };
 
@@ -68,7 +61,7 @@ export const fetchBook = bookId => {
 
 const deleteBookRequest = () =>{
 	return {
-		type: DELETE_BOOK_REQUEST
+		type: BT.DELETE_BOOK_REQUEST
 	}
 };
 
@@ -89,14 +82,59 @@ export const deleteBook = bookId => {
 
   const BookSuccess = book =>{
 	return {
-		type: BOOK_SUCCESS,
+		type: BT.BOOK_SUCCESS,
 		payload: book
 	}
 };
 
 const BookFailure = error =>{
 	return {
-		type: BOOK_FAILURE,
+		type: BT.BOOK_FAILURE,
 		payload :error
 	}
 };
+
+export const fetchLanguages= () => {
+		return dispatch => {
+			dispatch({
+				type:BT.FETCH_LANGUAGES_REQUEST
+			});
+			axios
+			.get("http://localhost:8080/api/v1/books/languages")
+			.then((response) => {
+				dispatch({
+					type:BT.LANGUAGE_SUCCESS,
+					payload:response.data
+				})
+			})
+			.catch(error=>{
+				dispatch({
+					type:BT.LANGUAGE_FAILURE,
+					payload:error
+				})
+			})
+		}
+};
+
+export const fetchGenres= () => {
+	return dispatch => {
+		dispatch({
+			type:BT.FETCH_GENRES_REQUEST
+		});
+		axios
+		.get("http://localhost:8080/api/v1/books/genres")
+
+		.then((response) => {
+			dispatch({
+				type:BT.GENRE_SUCCESS,
+				payload:response.data
+			})
+		})
+		.catch(error=>{
+			dispatch({
+				type:BT.GENRE_FAILURE,
+				payload:error
+			})
+		})
+	}
+}
