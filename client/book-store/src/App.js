@@ -30,6 +30,7 @@ export default function App() {
               <Route path="/list" exact component={BookList} />
               <Route path="/users" exact component={UserList} />
               <Route path="/login" exact component={Login} />
+              <Route path="/logout" exact component={Login} />
               <Route path="/register" exact component={Register} />
             </Switch>
           </Col>
