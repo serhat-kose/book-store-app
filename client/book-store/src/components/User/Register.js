@@ -43,7 +43,7 @@ import {
 			<Col xs={5}>
 			  <Card className="border border-dark bg-dark text-white">
 				<Card.Header>
-				  <FontAwesomeIcon icon={faUserPlus} /> Register
+				  <FontAwesomeIcon icon={faUserPlus} /> REGISTER
 				</Card.Header>
 				<Card.Body>
 				<Form.Group as={Col}>
@@ -138,7 +138,7 @@ import {
 					onClick={this.resetRegisterForm}
 					disabled={
 					  this.state.email.length === 0 &&
-					  this.state.password.length === 0
+					  this.state.password.length === 0 
 					}
 				  >
 					{" "}

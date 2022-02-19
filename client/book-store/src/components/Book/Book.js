@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { saveBook, fetchBook, updateBook } from "../../services/index";
+import {
+  saveBook,
+  fetchBook,
+  updateBook,
+  fetchGenres,
+  fetchLanguages,
+} from "../../services/index";
 import { Card, Form, Button, Col, Row, InputGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -46,37 +52,42 @@ class Book extends Component {
       this.findBookById(bookId);
     }
     this.getAllLanguages();
-    this.getAllGenres();
+    
   }
 
   getAllLanguages = () => {
-    axios
-      .get("http://localhost:8080/api/v1/books/languages")
-      .then((response) => response.data)
-      .then((data) => {
-        this.setState({
-          languages: [{ value: "", display: "Select Language" }].concat(
-            data.map((language) => {
-              return { value: language, display: language };
-            })
-          ),
-        });
-      });
+    this.props.fetchLanguages();
+    setTimeout(() => {
+      let bookLanguages = this.props.bookObject.languages;
+      console.log("bookLanguages****",bookLanguages)
+          if(bookLanguages){
+            this.setState({
+              languages: [{ value: "", display: "Select Language" }].concat(
+                bookLanguages.map((language) => {
+                  return { value: language, display: language };
+                })
+              ),
+            });
+            this.getAllGenres();
+          }
+    }, 200);
   };
 
   getAllGenres = () => {
-    axios
-      .get("http://localhost:8080/api/v1/books/genres")
-      .then((response) => response.data)
-      .then((data) => {
-        this.setState({
-          genres: [{ value: "", display: "Select Genre" }].concat(
-            data.map((genre) => {
-              return { value: genre, display: genre };
-            })
-          ),
-        });
-      });
+    this.props.fetchGenres();
+    setTimeout(() => {
+      let bookGenres = this.props.bookObject.genres;
+      console.log("bookGenres****",bookGenres)
+          if(bookGenres){
+            this.setState({
+              genres: [{ value: "", display: "Select Genre" }].concat(
+                bookGenres.map((genre) => {
+                  return { value: genre, display: genre };
+                })
+              ),
+            });
+          }
+    }, 200);
   };
 
   findBookById = (bookId) => {
@@ -96,26 +107,6 @@ class Book extends Component {
         });
       }
     }, 300);
-
-    // axios
-    //   .get("http://localhost:8080/api/v1/books/" + bookId)
-    //   .then((response) => {
-    //     if (response.data != null) {
-    //       this.setState({
-    //         id: response.data.id,
-    //         title: response.data.title,
-    //         author: response.data.author,
-    //         coverPhotoUrl: response.data.coverPhotoUrl,
-    //         isbnNumber: response.data.isbnNumber,
-    //         price: response.data.price,
-    //         language: response.data.language,
-    //         genre: response.data.genre,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error :" + error);
-    //   });
   };
 
   submitBook = (event) => {
@@ -134,20 +125,11 @@ class Book extends Component {
     this.props.saveBook(book);
 
     setTimeout(() => {
-      if (this.props.savedBookObject.book != null) {
+      if (this.props.bookObject.book != null) {
         this.setState({ show: true });
         setTimeout(() => this.setState({ show: false }), 3000);
       }
     }, 2000);
-
-    // axios.post("http://localhost:8080/api/v1/books/add",book).then(response =>{
-    // 		if(response.data!=null){
-
-    // 			this.setState({"show":true})
-    // 			setTimeout(() => this.setState({"show":false}), 3000);
-
-    // 		}
-    // })
 
     this.setState(this.initialState);
   };
@@ -169,20 +151,11 @@ class Book extends Component {
     this.props.updateBook(book);
 
     setTimeout(() => {
-      if (this.props.updatedBookObject.book != null) {
-               this.setState({ show: true, method: "put" });
-               setTimeout(() => this.setState({ show: false }), 3000);
-             }
+      if (this.props.bookObject.book != null) {
+        this.setState({ show: true, method: "put" });
+        setTimeout(() => this.setState({ show: false }), 3000);
+      }
     }, 1000);
-
-    // axios
-    //   .put("http://localhost:8080/api/v1/books/update", book)
-    //   .then((response) => {
-    //     if (response.data != null) {
-    //       this.setState({ show: true, method: "put" });
-    //       setTimeout(() => this.setState({ show: false }), 3000);
-    //     }
-    //   });
 
     this.setState(this.initialState);
   };
@@ -262,18 +235,17 @@ class Book extends Component {
                 <Form.Group as={Col} controlId="formGridCoverPhotoUrl">
                   <Form.Label>Cover Photo URL</Form.Label>
                   <InputGroup>
-                  <Form.Control
-                    required
-                    autoComplete="off"
-                    type="text"
-                    value={coverPhotoUrl}
-                    onChange={this.bookChange}
-                    name="coverPhotoUrl"
-                    className="bg-dark text-white"
-                    placeholder="Enter Book Photo URL"
-                  />
+                    <Form.Control
+                      required
+                      autoComplete="off"
+                      type="text"
+                      value={coverPhotoUrl}
+                      onChange={this.bookChange}
+                      name="coverPhotoUrl"
+                      className="bg-dark text-white"
+                      placeholder="Enter Book Photo URL"
+                    />
                   </InputGroup>
-                
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridIsbnNumber">
@@ -372,9 +344,7 @@ class Book extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    savedBookObject: state.book,
     bookObject: state.book,
-    updatedBookObject: state.book,
   };
 };
 
@@ -383,6 +353,8 @@ const mapDispatchToProps = (dispatch) => {
     saveBook: (book) => dispatch(saveBook(book)),
     fetchBook: (bookId) => dispatch(fetchBook(bookId)),
     updateBook: (book) => dispatch(updateBook(book)),
+    fetchLanguages: () => dispatch(fetchLanguages()),
+    fetchGenres: () => dispatch(fetchGenres()),
   };
 };
 

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Row, Col, Card, Form, InputGroup,Button } from "react-bootstrap";
+import { Row, Col, Card, Form, InputGroup,Button,Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connect } from "react-redux";
+import { authenticateUser } from "../../services/index";
 import {
   faEnvelope,
   faLock,
@@ -18,6 +20,7 @@ class Login extends Component {
   initialState = {
     email: "",
     password: "",
+    error:""
   };
   resetLoginForm =() =>{
 	  this.setState(()=>
@@ -31,14 +34,28 @@ class Login extends Component {
 	})
 }
 
+doLoggedIn = () =>{
+  this.props.authenticateUser(this.state.email,this.state.password);
+  setTimeout(() => {
+      if(this.props.auth.isLoggedIn){
+        return this.props.history.push("/")
+      }
+      else {
+        this.resetLoginForm();
+        this.setState({"error":"Invalid Email or Password"})
+      }
+  }, 300);
+}
+
   render() {
-    const { email, password } = this.state;
+    const { email, password,error } = this.state;
     return (
       <Row className="justify-content-md-center">
         <Col xs={5}>
+          {error && <Alert variant="danger">{error}</Alert>}
           <Card className="border border-dark bg-dark text-white">
             <Card.Header>
-              <FontAwesomeIcon icon={faSignInAlt} /> Login
+              <FontAwesomeIcon icon={faSignInAlt} /> LOGIN
             </Card.Header>
             <Card.Body>
               <Form.Group as={Col}>
@@ -82,15 +99,16 @@ class Login extends Component {
                 size="sm"
                 type="button"
                 variant="success"
+                onClick={this.doLoggedIn}
                 disabled={
                   this.state.email.length === 0 ||
                   this.state.password.length === 0
                 }
               >
-                {" "}
+                
                 <FontAwesomeIcon icon={faSignInAlt} />
                 Login
-              </Button>
+              </Button>{" "}
               <Button
                 size="sm"
                 type="button"
@@ -98,7 +116,7 @@ class Login extends Component {
 				onClick={this.resetLoginForm}
                 disabled={
                   this.state.email.length === 0 &&
-                  this.state.password.length === 0
+                  this.state.password.length === 0 && this.state.error.length === 0
                 }
               >
                 {" "}
@@ -113,4 +131,16 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticateUser: (email,password) => dispatch(authenticateUser(email,password)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
