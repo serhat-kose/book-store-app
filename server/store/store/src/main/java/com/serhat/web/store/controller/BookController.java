@@ -1,9 +1,7 @@
 package com.serhat.web.store.controller;
 
-import com.serhat.web.store.entity.*;
-import com.serhat.web.store.repository.*;
+import com.serhat.web.store.entity.book.Book;
 import com.serhat.web.store.service.*;
-import com.sun.source.tree.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
@@ -21,7 +19,7 @@ public class BookController {
    private BookService bookService;
 
     @GetMapping("/books")
-    public ResponseEntity<Page<Book>> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir){
+    public ResponseEntity<Page<Book>> getAllBooks(int pageNumber, int pageSize, String sortBy, String sortDir){
         return new ResponseEntity<>(bookService.getAllBooks(pageNumber,pageSize,sortBy,sortDir),HttpStatus.OK) ;
     }
 

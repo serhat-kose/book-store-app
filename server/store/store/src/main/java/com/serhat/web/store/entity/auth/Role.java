@@ -1,11 +1,12 @@
-package com.serhat.web.store.entity;
+package com.serhat.web.store.entity.auth;
 
+import com.serhat.web.store.enums.RoleEnum;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 @Data
 @Getter
 @Setter
@@ -18,5 +19,7 @@ public class Role {
     private Long id;
 
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private RoleEnum name;
 }

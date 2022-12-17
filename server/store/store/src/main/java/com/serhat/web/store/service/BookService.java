@@ -1,13 +1,11 @@
 package com.serhat.web.store.service;
 
-import com.serhat.web.store.entity.*;
+import com.serhat.web.store.entity.book.Book;
 import org.springframework.data.domain.*;
-
-import java.util.*;
 
 public interface BookService {
 
-    Page<Book> getAllBooks(Pageable pageable,String searchText);
+    Page<Book> getAllBooks(Pageable pageable, String searchText);
 
     Page<Book> getAllBooks(int pageNumber,int pageSize,String sortBy,String sortDir);
 

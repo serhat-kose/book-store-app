@@ -1,4 +1,4 @@
-package com.serhat.web.store.entity;
+package com.serhat.web.store.entity.book;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;

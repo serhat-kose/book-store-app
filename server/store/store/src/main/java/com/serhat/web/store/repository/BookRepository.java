@@ -1,6 +1,6 @@
 package com.serhat.web.store.repository;
 
-import com.serhat.web.store.entity.*;
+import com.serhat.web.store.entity.book.Book;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.*;

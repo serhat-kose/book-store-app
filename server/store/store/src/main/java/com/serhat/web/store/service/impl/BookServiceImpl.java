@@ -1,14 +1,12 @@
 package com.serhat.web.store.service.impl;
 
-import com.serhat.web.store.entity.*;
+import com.serhat.web.store.entity.book.Book;
 import com.serhat.web.store.repository.*;
 import com.serhat.web.store.service.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
