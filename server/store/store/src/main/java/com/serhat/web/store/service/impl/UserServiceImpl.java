@@ -8,15 +8,17 @@ import com.serhat.web.store.entity.auth.Role;
 import com.serhat.web.store.entity.auth.User;
 import com.serhat.web.store.entity.auth.UserDetailsImpl;
 import com.serhat.web.store.enums.RoleEnum;
+import com.serhat.web.store.event.UserRegistrationEmailEvent;
 import com.serhat.web.store.repository.RoleRepository;
 import com.serhat.web.store.repository.UserRepository;
 import com.serhat.web.store.security.config.JwtUtils;
 import com.serhat.web.store.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordEncoder encoder;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @Override
     public JwtResponseDTO login(LoginRequestDTO request) {
 
@@ -55,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return new JwtResponseDTO(jwt,
@@ -112,8 +117,11 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return new MessageResponseDTO("");
+        UserRegistrationEmailEvent event = new UserRegistrationEmailEvent(savedUser.getEmail());
+        publisher.publishEvent(event);
+
+        return new MessageResponseDTO("Successfully Registered");
     }
 }
